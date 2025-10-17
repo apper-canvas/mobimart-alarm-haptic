@@ -70,7 +70,7 @@ export default function Root() {
 
       const { ApperUI } = window.ApperSDK;
 
-      ApperUI.setup(apperClient, {
+ApperUI.setup(apperClient, {
         target: "#authentication",
         clientId: import.meta.env.VITE_APPER_PROJECT_ID,
         view: "both",
@@ -78,8 +78,16 @@ export default function Root() {
         onError: handleAuthError,
       });
 
-    } catch (error) {
+} catch (error) {
       console.error('Failed to initialize authentication:', error);
+      
+      // Check for specific "Public profile not enabled" error
+      const errorMessage = error?.message || error?.toString() || 'Failed to initialize authentication';
+      if (errorMessage.includes('Public profile not enabled')) {
+        // Redirect to error page with specific message
+        navigate(`/error?message=${encodeURIComponent('Public profile not enabled for this app. Please enable public profiles in your Apper project settings.')}`);
+      }
+      
       dispatch(clearUser());
       handleAuthComplete();
     }
@@ -95,8 +103,13 @@ export default function Root() {
     handleAuthComplete();
   };
 
-  const handleAuthError = (error) => {
+const handleAuthError = (error) => {
     console.error("Auth error:", error);
+    
+    // Extract error message and redirect to error page
+    const errorMessage = error?.message || error?.toString() || 'Authentication failed';
+    navigate(`/error?message=${encodeURIComponent(errorMessage)}`);
+    
     dispatch(clearUser());
     handleAuthComplete();
   };
