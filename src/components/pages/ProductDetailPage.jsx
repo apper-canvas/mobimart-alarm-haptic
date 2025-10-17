@@ -65,7 +65,6 @@ const ProductDetailPage = () => {
       <div className="p-4 max-w-screen-xl mx-auto">
         <Error message={error || "Product not found"} onRetry={loadProduct} />
       </div>
-    );
 );
   }
 
@@ -73,211 +72,164 @@ const ProductDetailPage = () => {
   const savingsPercent = product.originalPrice > 0 ? Math.round((savings / product.originalPrice) * 100) : 0;
   return (
     <div className="min-h-screen bg-white">
-      {/* Header */}
-      <div className="bg-gradient-to-br from-primary via-secondary to-accent text-white sticky top-0 z-10">
+    {/* Header */}
+    <div
+        className="bg-gradient-to-br from-primary via-secondary to-accent text-white sticky top-0 z-10">
         <div className="max-w-screen-xl mx-auto px-4 py-4 flex items-center gap-4">
-          <button
-            onClick={() => navigate(-1)}
-            className="p-2 hover:bg-white/10 rounded-lg transition-colors"
-          >
-            <ApperIcon name="ArrowLeft" size={24} />
-          </button>
-          <h1 className="text-lg font-semibold flex-1">Product Details</h1>
-          <button
-            onClick={() => addToComparison(product)}
-            className={`p-2 rounded-lg transition-colors ${
-              isInComparison(product.Id)
-                ? "bg-white text-primary"
-                : "hover:bg-white/10"
-            }`}
-          >
-            <ApperIcon name="GitCompare" size={24} />
-          </button>
+            <button
+                onClick={() => navigate(-1)}
+                className="p-2 hover:bg-white/10 rounded-lg transition-colors">
+                <ApperIcon name="ArrowLeft" size={24} />
+            </button>
+            <h1 className="text-lg font-semibold flex-1">Product Details</h1>
+            <button
+                onClick={() => addToComparison(product)}
+                className={`p-2 rounded-lg transition-colors ${isInComparison(product.Id) ? "bg-white text-primary" : "hover:bg-white/10"}`}>
+                <ApperIcon name="GitCompare" size={24} />
+            </button>
         </div>
-      </div>
-
-      <div className="max-w-screen-xl mx-auto px-4 py-6">
-        <div className="grid lg:grid-cols-2 gap-8">
-          {/* Images */}
-          <div className="space-y-4">
-            <motion.div
-              key={selectedImage}
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              className="aspect-square bg-gray-50 rounded-2xl overflow-hidden"
-            >
-              <img
-src={product.images?.[selectedImage] || 'https://via.placeholder.com/400'}
-                alt={product.name_c || 'Product'}
-                className="w-full h-full object-cover"
-              />
-            </motion.div>
-            <div className="flex gap-3">
-{(product.images || []).map((image, index) => (
-                <button
-                  key={index}
-                  onClick={() => setSelectedImage(index)}
-                  className={`relative aspect-square rounded-lg overflow-hidden border-2 transition-all ${
-                    selectedImage === index 
-                      ? 'border-primary' 
-                      : 'border-gray-200 hover:border-gray-300'
-                  }`}
-                >
-                  <img
-                    src={image || 'https://via.placeholder.com/400'}
-                    alt={`${product.name_c || 'Product'} ${index + 1}`}
-                    className="w-full h-full object-cover"
-                  />
-                </button>
-              ))}
-            </div>
-          </div>
-
-          {/* Details */}
-          <div className="space-y-6">
-            <div>
-<p className="text-sm text-gray-500 mb-2">{product.brand_c || ''}</p>
-              <h1 className="text-2xl font-bold text-gray-900 mb-4">
-                {product.name_c || 'Product'}
-              </h1>
-              <div className="flex items-center gap-4 mb-4">
-                <div className="flex items-center gap-2">
-<div className="flex items-center gap-1">
-                    {[...Array(5)].map((_, i) => (
-                      <ApperIcon
-                        key={i}
-                        name="Star"
-                        size={16}
-                        className={i < product.rating_c ? "text-warning fill-warning" : "text-gray-300"}
-                      />
-                    ))}
-                  </div>
-                  <span className="font-medium">{product.rating_c || 0}</span>
-                  <span className="text-gray-500">
-                    ({product.review_count_c || 0} reviews)
-                  </span>
-                </div>
-
-                {product.in_stock_c ? (
-                  <Badge variant="success" className="text-sm">
-                    <ApperIcon name="Check" size={14} className="mr-1" />
-                    In Stock
-                  </Badge>
-                ) : (
-                  <Badge variant="error" className="text-sm">
-                    <ApperIcon name="X" size={14} className="mr-1" />
-                    Out of Stock
-                  </Badge>
-                )}
-              </div>
-
-              {/* Price */}
-              <div className="bg-gradient-to-br from-primary/5 to-accent/5 rounded-xl p-6 mb-6">
-                <div className="flex items-end gap-4 mb-2">
-                  <div className="text-4xl font-bold bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
-${product.price_c || 0}
-                  </div>
-                  {product.originalPrice > product.price_c && (
-                    <div className="text-xl text-gray-400 line-through pb-1">
-                      ${product.originalPrice || 0}
-                    </div>
-                  )}
-                </div>
-{savingsPercent > 0 && (
-                  <Badge variant="accent" className="text-sm">
-                    Save {savingsPercent}% (${savings.toFixed(0)})
-                  </Badge>
-                )}
-              </div>
-
-              {/* Quantity */}
-              <div className="mb-6">
-                <label className="block text-sm font-medium text-gray-700 mb-3">
-                  Quantity
-                </label>
-                <div className="flex items-center gap-3 bg-gray-50 rounded-lg p-2 w-fit">
-                  <button
-                    onClick={() => setQuantity(Math.max(1, quantity - 1))}
-                    className="w-10 h-10 flex items-center justify-center hover:bg-white rounded transition-colors"
-                  >
-                    <ApperIcon name="Minus" size={20} />
-                  </button>
-                  <span className="w-12 text-center font-medium text-lg">
-                    {quantity}
-                  </span>
-                  <button
-                    onClick={() => setQuantity(quantity + 1)}
-                    className="w-10 h-10 flex items-center justify-center hover:bg-white rounded transition-colors"
-                  >
-                    <ApperIcon name="Plus" size={20} />
-                  </button>
-                </div>
-              </div>
-
-              {/* Actions */}
-              <div className="flex gap-3 mb-8">
-                <Button
-                  onClick={handleBuyNow}
-disabled={!product.in_stock_c}
-                  variant="primary"
-                  size="lg"
-                  className="flex-1"
-                >
-                  <ApperIcon name="ShoppingBag" size={20} className="mr-2" />
-                  Buy Now
-                </Button>
-<Button
-                  onClick={handleAddToCart}
-                  disabled={!product.in_stock_c}
-                  variant="secondary"
-                  size="lg"
-                  className="flex-1"
-                >
-                  <ApperIcon name="ShoppingCart" size={20} className="mr-2" />
-                  Add to Cart
-                </Button>
-              </div>
-            </div>
-
-            {/* Description */}
-            <div>
-              <h2 className="text-xl font-bold text-gray-900 mb-3">
-                Description
-              </h2>
-              <p className="text-gray-600 leading-relaxed">
-{product.description_c || 'No description available'}
-              </p>
-            </div>
-
-            {/* Specifications */}
-            <div>
-              <h2 className="text-xl font-bold text-gray-900 mb-3">
-                Specifications
-              </h2>
-              <div className="bg-gray-50 rounded-xl p-6 space-y-4">
-{Object.entries({
-                  display: product.specs_display_c,
-                  processor: product.specs_processor_c,
-                  ram: product.specs_ram_c,
-                  storage: product.specs_storage_c,
-                  camera: product.specs_camera_c,
-                  battery: product.specs_battery_c,
-                  os: product.specs_os_c
-                }).filter(([key, value]) => value).map(([key, value]) => (
-                  <div
-                    key={key}
-                    className="flex items-center justify-between py-3 border-b border-gray-100 last:border-0"
-                  >
-                    <span className="text-gray-600 capitalize">{key}</span>
-                    <span className="font-medium text-gray-900">{value}</span>
-<span className="font-medium text-gray-900">{value}</span>
-                  </div>
-                ))}
-            </div>
-          </div>
-        </div>
-      </div>
     </div>
+    <div className="max-w-screen-xl mx-auto px-4 py-6">
+        <div className="grid lg:grid-cols-2 gap-8">
+            {/* Images */}
+            <div className="space-y-4">
+                <motion.div
+                    key={selectedImage}
+                    initial={{
+                        opacity: 0
+                    }}
+                    animate={{
+                        opacity: 1
+                    }}
+                    className="aspect-square bg-gray-50 rounded-2xl overflow-hidden">
+                    <img
+                        src={product.images?.[selectedImage] || "https://via.placeholder.com/400"}
+                        alt={product.name_c || "Product"}
+                        className="w-full h-full object-cover" />
+                </motion.div>
+                <div className="flex gap-3">
+                    {(product.images || []).map((image, index) => <button
+                        key={index}
+                        onClick={() => setSelectedImage(index)}
+                        className={`relative aspect-square rounded-lg overflow-hidden border-2 transition-all ${selectedImage === index ? "border-primary" : "border-gray-200 hover:border-gray-300"}`}>
+                        <img
+                            src={image || "https://via.placeholder.com/400"}
+                            alt={`${product.name_c || "Product"} ${index + 1}`}
+                            className="w-full h-full object-cover" />
+                    </button>)}
+                </div>
+            </div>
+            {/* Details */}
+            <div className="space-y-6">
+                <div>
+                    <p className="text-sm text-gray-500 mb-2">{product.brand_c || ""}</p>
+                    <h1 className="text-2xl font-bold text-gray-900 mb-4">
+                        {product.name_c || "Product"}
+                    </h1>
+                    <div className="flex items-center gap-4 mb-4">
+                        <div className="flex items-center gap-2">
+                            <div className="flex items-center gap-1">
+                                {[...Array(5)].map((_, i) => <ApperIcon
+                                    key={i}
+                                    name="Star"
+                                    size={16}
+                                    className={i < product.rating_c ? "text-warning fill-warning" : "text-gray-300"} />)}
+                            </div>
+                            <span className="font-medium">{product.rating_c || 0}</span>
+                            <span className="text-gray-500">({product.review_count_c || 0}reviews)
+                                                  </span>
+                        </div>
+                        {product.in_stock_c ? <Badge variant="success" className="text-sm">
+                            <ApperIcon name="Check" size={14} className="mr-1" />In Stock
+                                              </Badge> : <Badge variant="error" className="text-sm">
+                            <ApperIcon name="X" size={14} className="mr-1" />Out of Stock
+                                              </Badge>}
+                    </div>
+                    {/* Price */}
+                    <div
+                        className="bg-gradient-to-br from-primary/5 to-accent/5 rounded-xl p-6 mb-6">
+                        <div className="flex items-end gap-4 mb-2">
+                            <div
+                                className="text-4xl font-bold bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">${product.price_c || 0}
+                            </div>
+                            {product.originalPrice > product.price_c && <div className="text-xl text-gray-400 line-through pb-1">${product.originalPrice || 0}
+                            </div>}
+                        </div>
+                        {savingsPercent > 0 && <Badge variant="accent" className="text-sm">Save {savingsPercent}% (${savings.toFixed(0)})
+                                              </Badge>}
+                    </div>
+                    {/* Quantity */}
+                    <div className="mb-6">
+                        <label className="block text-sm font-medium text-gray-700 mb-3">Quantity
+                                            </label>
+                        <div className="flex items-center gap-3 bg-gray-50 rounded-lg p-2 w-fit">
+                            <button
+                                onClick={() => setQuantity(Math.max(1, quantity - 1))}
+                                className="w-10 h-10 flex items-center justify-center hover:bg-white rounded transition-colors">
+                                <ApperIcon name="Minus" size={20} />
+                            </button>
+                            <span className="w-12 text-center font-medium text-lg">
+                                {quantity}
+                            </span>
+                            <button
+                                onClick={() => setQuantity(quantity + 1)}
+                                className="w-10 h-10 flex items-center justify-center hover:bg-white rounded transition-colors">
+                                <ApperIcon name="Plus" size={20} />
+                            </button>
+                        </div>
+                    </div>
+                    {/* Actions */}
+                    <div className="flex gap-3 mb-8">
+                        <Button
+                            onClick={handleBuyNow}
+                            disabled={!product.in_stock_c}
+                            variant="primary"
+                            size="lg"
+                            className="flex-1">
+                            <ApperIcon name="ShoppingBag" size={20} className="mr-2" />Buy Now
+                                            </Button>
+                        <Button
+                            onClick={handleAddToCart}
+                            disabled={!product.in_stock_c}
+                            variant="secondary"
+                            size="lg"
+                            className="flex-1">
+                            <ApperIcon name="ShoppingCart" size={20} className="mr-2" />Add to Cart
+                                            </Button>
+                    </div>
+                </div>
+                {/* Description */}
+                <div>
+                    <h2 className="text-xl font-bold text-gray-900 mb-3">Description
+                                      </h2>
+                    <p className="text-gray-600 leading-relaxed">
+                        {product.description_c || "No description available"}
+                    </p>
+                </div>
+                {/* Specifications */}
+                <div>
+                    <h2 className="text-xl font-bold text-gray-900 mb-3">Specifications
+                                      </h2>
+                    <div className="bg-gray-50 rounded-xl p-6 space-y-4">
+                        {Object.entries({
+                            display: product.specs_display_c,
+                            processor: product.specs_processor_c,
+                            ram: product.specs_ram_c,
+                            storage: product.specs_storage_c,
+                            camera: product.specs_camera_c,
+                            battery: product.specs_battery_c,
+                            os: product.specs_os_c
+                        }).filter(([key, value]) => value).map(([key, value]) => <div
+                            key={key}
+                            className="flex items-center justify-between py-3 border-b border-gray-100 last:border-0">
+                            <span className="text-gray-600 capitalize">{key}</span>
+                            <span className="font-medium text-gray-900">{value}</span>
+                        </div>)}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div></div>
   );
 };
 
