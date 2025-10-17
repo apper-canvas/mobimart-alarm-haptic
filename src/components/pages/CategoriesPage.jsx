@@ -67,7 +67,7 @@ const CategoriesPage = () => {
         sorted.sort((a, b) => b.rating - a.rating);
         break;
       case "newest":
-        sorted.sort((a, b) => b.Id - a.Id);
+sorted.sort((a, b) => b.Id - a.Id);
         break;
       default:
         sorted = [...filteredProducts];

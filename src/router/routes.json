@@ -1,0 +1,152 @@
+{
+  "/": {
+    "allow": {
+      "when": {
+        "conditions": [
+          {
+            "label": "Homepage is public",
+            "rule": "public"
+          }
+        ]
+      }
+    }
+  },
+  "/categories": {
+    "allow": {
+      "when": {
+        "conditions": [
+          {
+            "label": "Categories page is public",
+            "rule": "public"
+          }
+        ]
+      }
+    }
+  },
+  "/product/:id": {
+    "allow": {
+      "when": {
+        "conditions": [
+          {
+            "label": "Product detail is public",
+            "rule": "public"
+          }
+        ]
+      }
+    }
+  },
+  "/cart": {
+    "allow": {
+      "when": {
+        "conditions": [
+          {
+            "label": "Cart is public",
+            "rule": "public"
+          }
+        ]
+      }
+    }
+  },
+  "/search": {
+    "allow": {
+      "when": {
+        "conditions": [
+          {
+            "label": "Search is public",
+            "rule": "public"
+          }
+        ]
+      }
+    }
+  },
+  "/comparison": {
+    "allow": {
+      "when": {
+        "conditions": [
+          {
+            "label": "Comparison is public",
+            "rule": "public"
+          }
+        ]
+      }
+    }
+  },
+  "/login": {
+    "allow": {
+      "when": {
+        "conditions": [
+          {
+            "label": "Login is public",
+            "rule": "public"
+          }
+        ]
+      },
+      "excludeRedirectQuery": true
+    }
+  },
+  "/signup": {
+    "allow": {
+      "when": {
+        "conditions": [
+          {
+            "label": "Signup is public",
+            "rule": "public"
+          }
+        ]
+      },
+      "excludeRedirectQuery": true
+    }
+  },
+  "/callback": {
+    "allow": {
+      "when": {
+        "conditions": [
+          {
+            "label": "Callback is public",
+            "rule": "public"
+          }
+        ]
+      },
+      "excludeRedirectQuery": true
+    }
+  },
+  "/error": {
+    "allow": {
+      "when": {
+        "conditions": [
+          {
+            "label": "Error page is public",
+            "rule": "public"
+          }
+        ]
+      },
+      "excludeRedirectQuery": true
+    }
+  },
+  "/reset-password/:appId/:fields": {
+    "allow": {
+      "when": {
+        "conditions": [
+          {
+            "label": "Reset password is public",
+            "rule": "public"
+          }
+        ]
+      },
+      "excludeRedirectQuery": true
+    }
+  },
+  "/prompt-password/:appId/:emailAddress/:provider": {
+    "allow": {
+      "when": {
+        "conditions": [
+          {
+            "label": "Prompt password is public",
+            "rule": "public"
+          }
+        ]
+      },
+      "excludeRedirectQuery": true
+    }
+  }
+}

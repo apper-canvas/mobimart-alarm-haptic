@@ -92,9 +92,9 @@ const ComparisonPage = () => {
               className="bg-white rounded-lg overflow-hidden border border-gray-100"
             >
               <div className="relative">
-                <img
-                  src={product.images[0]}
-                  alt={product.name}
+<img
+                  src={product.images?.[0] || 'https://via.placeholder.com/400'}
+                  alt={product.name_c || 'Product'}
                   className="w-full aspect-square object-cover"
                 />
                 <button
@@ -105,19 +105,19 @@ const ComparisonPage = () => {
                 </button>
               </div>
               <div className="p-4">
-                <p className="text-xs text-gray-500 mb-1">{product.brand}</p>
-                <h3 className="font-semibold text-lg text-gray-900 mb-3">
-                  {product.name}
+<p className="text-xs text-gray-500 mb-1">{product.brand_c || ''}</p>
+                <h3 className="font-medium text-gray-900 mb-2 line-clamp-2">
+                  {product.name_c || 'Product'}
                 </h3>
-                <div className="text-2xl font-bold text-primary mb-4">
-                  ${product.price}
+                <div className="text-xl font-bold text-primary mb-3">
+                  ${product.price_c || 0}
                 </div>
                 <div className="space-y-3">
                   {specs.map((spec) => (
                     <div key={spec.key} className="flex justify-between py-2 border-b border-gray-100 last:border-0">
                       <span className="text-sm text-gray-600">{spec.label}</span>
                       <span className="text-sm font-medium text-gray-900 text-right">
-                        {product.specs[spec.key]}
+{product[`specs_${spec.key}_c`] || 'N/A'}
                       </span>
                     </div>
                   ))}
@@ -154,17 +154,17 @@ const ComparisonPage = () => {
                       </button>
                       <div className="w-32 h-32 mx-auto mb-4 rounded-lg overflow-hidden">
                         <img
-                          src={product.images[0]}
-                          alt={product.name}
+src={product.images?.[0] || 'https://via.placeholder.com/400'}
+                          alt={product.name_c || 'Product'}
                           className="w-full h-full object-cover"
                         />
                       </div>
-                      <p className="text-xs text-gray-500 mb-1">{product.brand}</p>
-                      <h3 className="font-semibold text-gray-900 mb-2">
-                        {product.name}
+                      <p className="text-xs text-gray-500 mb-1">{product.brand_c || ''}</p>
+                      <h3 className="font-medium text-gray-900 mb-2 line-clamp-2 text-sm">
+                        {product.name_c || 'Product'}
                       </h3>
                       <div className="text-xl font-bold text-primary mb-3">
-                        ${product.price}
+                        ${product.price_c || 0}
                       </div>
                       <Button
                         onClick={() => navigate(`/product/${product.Id}`)}
@@ -186,7 +186,7 @@ const ComparisonPage = () => {
                     <td key={product.Id} className="p-4 text-center">
                       <div className="flex items-center justify-center gap-2">
                         <ApperIcon name="Star" size={16} className="text-warning fill-warning" />
-                        <span className="font-medium">{product.rating}</span>
+<span className="font-medium">{product.rating_c || 0}</span>
                       </div>
                     </td>
                   ))}
@@ -197,8 +197,8 @@ const ComparisonPage = () => {
                   </td>
                   {comparisonItems.map((product) => (
                     <td key={product.Id} className="p-4 text-center">
-                      <Badge variant={product.inStock ? "success" : "error"}>
-                        {product.inStock ? "In Stock" : "Out of Stock"}
+<Badge variant={product.in_stock_c ? "success" : "error"}>
+                        {product.in_stock_c ? "In Stock" : "Out of Stock"}
                       </Badge>
                     </td>
                   ))}
@@ -210,7 +210,7 @@ const ComparisonPage = () => {
                     </td>
                     {comparisonItems.map((product) => (
                       <td key={product.Id} className="p-4 text-center text-gray-900">
-                        {product.specs[spec.key]}
+{product[`specs_${spec.key}_c`] || 'N/A'}
                       </td>
                     ))}
                   </tr>

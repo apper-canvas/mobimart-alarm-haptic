@@ -35,7 +35,7 @@ const HomePage = () => {
       setLoading(true);
       setError("");
       const [featuredData, trendingData, allData] = await Promise.all([
-        productService.getFeatured(),
+productService.getFeatured(),
         productService.getTrending(),
         productService.getAll()
       ]);
@@ -52,7 +52,7 @@ const HomePage = () => {
   const getCategoryCounts = () => {
     return categories.map(cat => ({
       ...cat,
-      count: allProducts.filter(p => p.category === cat.name).length
+count: allProducts.filter(p => p.category_c === cat.name).length
     }));
   };
 

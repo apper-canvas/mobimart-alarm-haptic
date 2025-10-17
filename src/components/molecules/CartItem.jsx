@@ -16,18 +16,18 @@ const CartItem = ({ item, onUpdateQuantity, onRemove }) => {
       <div className="flex gap-4">
         <div className="w-24 h-24 bg-gray-50 rounded-lg overflow-hidden flex-shrink-0">
           <img
-            src={product.images[0]}
-            alt={product.name}
+src={product.images?.[0] || 'https://via.placeholder.com/400'}
+            alt={product.name_c || 'Product'}
             className="w-full h-full object-cover"
           />
         </div>
 
         <div className="flex-1 min-w-0">
-          <div className="flex justify-between gap-2 mb-2">
+          <div className="flex items-start justify-between gap-2 mb-2">
             <div className="flex-1 min-w-0">
-              <p className="text-xs text-gray-500 mb-1">{product.brand}</p>
+              <p className="text-xs text-gray-500 mb-1">{product.brand_c || ''}</p>
               <h3 className="font-semibold text-gray-900 line-clamp-2">
-                {product.name}
+{product.name_c || 'Product'}
               </h3>
             </div>
             <button
@@ -40,10 +40,10 @@ const CartItem = ({ item, onUpdateQuantity, onRemove }) => {
 
           <div className="flex flex-wrap gap-2 mb-3">
             <Badge variant="default" className="text-xs">
-              {product.specs.ram}
+{product.specs_ram_c || 'N/A'}
             </Badge>
             <Badge variant="default" className="text-xs">
-              {product.specs.storage}
+              {product.specs_storage_c || 'N/A'}
             </Badge>
           </div>
 
@@ -65,8 +65,8 @@ const CartItem = ({ item, onUpdateQuantity, onRemove }) => {
             </div>
 
             <div className="text-right">
-              <div className="text-xl font-bold text-primary">
-                ${(product.price * quantity).toFixed(2)}
+<div className="text-xl font-bold text-primary">
+                ${((product.price_c || 0) * quantity).toFixed(2)}
               </div>
               <div className="text-xs text-gray-500">
                 ${product.price} each

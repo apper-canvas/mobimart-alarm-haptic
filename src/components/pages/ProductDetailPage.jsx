@@ -1,14 +1,14 @@
-import { useState, useEffect } from "react";
-import { useParams, useNavigate } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { useNavigate, useParams } from "react-router-dom";
 import { motion } from "framer-motion";
+import { useCart } from "@/hooks/useCart";
+import { useComparison } from "@/hooks/useComparison";
 import productService from "@/services/api/productService";
-import Loading from "@/components/ui/Loading";
-import Error from "@/components/ui/Error";
 import ApperIcon from "@/components/ApperIcon";
 import Button from "@/components/atoms/Button";
 import Badge from "@/components/atoms/Badge";
-import { useCart } from "@/hooks/useCart";
-import { useComparison } from "@/hooks/useComparison";
+import Loading from "@/components/ui/Loading";
+import Error from "@/components/ui/Error";
 
 const ProductDetailPage = () => {
   const { id } = useParams();
@@ -66,11 +66,11 @@ const ProductDetailPage = () => {
         <Error message={error || "Product not found"} onRetry={loadProduct} />
       </div>
     );
+);
   }
 
-  const savings = product.originalPrice - product.price;
-  const savingsPercent = Math.round((savings / product.originalPrice) * 100);
-
+  const savings = product.originalPrice - product.price_c;
+  const savingsPercent = product.originalPrice > 0 ? Math.round((savings / product.originalPrice) * 100) : 0;
   return (
     <div className="min-h-screen bg-white">
       {/* Header */}
@@ -107,25 +107,25 @@ const ProductDetailPage = () => {
               className="aspect-square bg-gray-50 rounded-2xl overflow-hidden"
             >
               <img
-                src={product.images[selectedImage]}
-                alt={product.name}
+src={product.images?.[selectedImage] || 'https://via.placeholder.com/400'}
+                alt={product.name_c || 'Product'}
                 className="w-full h-full object-cover"
               />
             </motion.div>
             <div className="flex gap-3">
-              {product.images.map((image, index) => (
+{(product.images || []).map((image, index) => (
                 <button
                   key={index}
                   onClick={() => setSelectedImage(index)}
-                  className={`w-20 h-20 rounded-lg overflow-hidden border-2 transition-all ${
-                    selectedImage === index
-                      ? "border-primary scale-105"
-                      : "border-gray-200 hover:border-gray-300"
+                  className={`relative aspect-square rounded-lg overflow-hidden border-2 transition-all ${
+                    selectedImage === index 
+                      ? 'border-primary' 
+                      : 'border-gray-200 hover:border-gray-300'
                   }`}
                 >
                   <img
-                    src={image}
-                    alt={`${product.name} ${index + 1}`}
+                    src={image || 'https://via.placeholder.com/400'}
+                    alt={`${product.name_c || 'Product'} ${index + 1}`}
                     className="w-full h-full object-cover"
                   />
                 </button>
@@ -136,36 +136,29 @@ const ProductDetailPage = () => {
           {/* Details */}
           <div className="space-y-6">
             <div>
-              <p className="text-sm text-gray-500 mb-2">{product.brand}</p>
-              <h1 className="text-3xl font-bold text-gray-900 mb-4">
-                {product.name}
+<p className="text-sm text-gray-500 mb-2">{product.brand_c || ''}</p>
+              <h1 className="text-2xl font-bold text-gray-900 mb-4">
+                {product.name_c || 'Product'}
               </h1>
               <div className="flex items-center gap-4 mb-4">
                 <div className="flex items-center gap-2">
-                  <div className="flex items-center gap-1">
+<div className="flex items-center gap-1">
                     {[...Array(5)].map((_, i) => (
                       <ApperIcon
                         key={i}
                         name="Star"
                         size={16}
-                        className={`${
-                          i < Math.floor(product.rating)
-                            ? "text-warning fill-warning"
-                            : "text-gray-300"
-                        }`}
+                        className={i < product.rating_c ? "text-warning fill-warning" : "text-gray-300"}
                       />
                     ))}
                   </div>
-                  <span className="font-medium">{product.rating}</span>
+                  <span className="font-medium">{product.rating_c || 0}</span>
+                  <span className="text-gray-500">
+                    ({product.review_count_c || 0} reviews)
+                  </span>
                 </div>
-                <span className="text-gray-500">
-                  ({product.reviewCount} reviews)
-                </span>
-              </div>
 
-              {/* Stock Status */}
-              <div className="mb-6">
-                {product.inStock ? (
+                {product.in_stock_c ? (
                   <Badge variant="success" className="text-sm">
                     <ApperIcon name="Check" size={14} className="mr-1" />
                     In Stock
@@ -182,17 +175,17 @@ const ProductDetailPage = () => {
               <div className="bg-gradient-to-br from-primary/5 to-accent/5 rounded-xl p-6 mb-6">
                 <div className="flex items-end gap-4 mb-2">
                   <div className="text-4xl font-bold bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
-                    ${product.price}
+${product.price_c || 0}
                   </div>
-                  {product.originalPrice > product.price && (
+                  {product.originalPrice > product.price_c && (
                     <div className="text-xl text-gray-400 line-through pb-1">
-                      ${product.originalPrice}
+                      ${product.originalPrice || 0}
                     </div>
                   )}
                 </div>
-                {savingsPercent > 0 && (
+{savingsPercent > 0 && (
                   <Badge variant="accent" className="text-sm">
-                    Save {savingsPercent}% (${savings})
+                    Save {savingsPercent}% (${savings.toFixed(0)})
                   </Badge>
                 )}
               </div>
@@ -225,7 +218,7 @@ const ProductDetailPage = () => {
               <div className="flex gap-3 mb-8">
                 <Button
                   onClick={handleBuyNow}
-                  disabled={!product.inStock}
+disabled={!product.in_stock_c}
                   variant="primary"
                   size="lg"
                   className="flex-1"
@@ -233,9 +226,9 @@ const ProductDetailPage = () => {
                   <ApperIcon name="ShoppingBag" size={20} className="mr-2" />
                   Buy Now
                 </Button>
-                <Button
+<Button
                   onClick={handleAddToCart}
-                  disabled={!product.inStock}
+                  disabled={!product.in_stock_c}
                   variant="secondary"
                   size="lg"
                   className="flex-1"
@@ -252,7 +245,7 @@ const ProductDetailPage = () => {
                 Description
               </h2>
               <p className="text-gray-600 leading-relaxed">
-                {product.description}
+{product.description_c || 'No description available'}
               </p>
             </div>
 
@@ -262,18 +255,24 @@ const ProductDetailPage = () => {
                 Specifications
               </h2>
               <div className="bg-gray-50 rounded-xl p-6 space-y-4">
-                {Object.entries(product.specs).map(([key, value]) => (
+{Object.entries({
+                  display: product.specs_display_c,
+                  processor: product.specs_processor_c,
+                  ram: product.specs_ram_c,
+                  storage: product.specs_storage_c,
+                  camera: product.specs_camera_c,
+                  battery: product.specs_battery_c,
+                  os: product.specs_os_c
+                }).filter(([key, value]) => value).map(([key, value]) => (
                   <div
                     key={key}
-                    className="flex items-center justify-between py-3 border-b border-gray-200 last:border-0"
+                    className="flex items-center justify-between py-3 border-b border-gray-100 last:border-0"
                   >
-                    <span className="text-gray-600 capitalize">
-                      {key.replace(/([A-Z])/g, " $1").trim()}
-                    </span>
+                    <span className="text-gray-600 capitalize">{key}</span>
                     <span className="font-medium text-gray-900">{value}</span>
+<span className="font-medium text-gray-900">{value}</span>
                   </div>
                 ))}
-              </div>
             </div>
           </div>
         </div>
